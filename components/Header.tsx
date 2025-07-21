@@ -6,6 +6,13 @@ import { UserButton, SignInButton, SignUpButton, useUser } from "@clerk/nextjs";
 import { Menu, X, ChefHat, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Add Razorpay to the window type for TypeScript
+declare global {
+  interface Window {
+    Razorpay?: any;
+  }
+}
+
 // Load Razorpay script
 function useRazorpayScript() {
   useEffect(() => {
@@ -130,7 +137,7 @@ export default function Header() {
           window.location.reload();
         },
         prefill: {
-          email: user?.email,
+          email: user?.primaryEmailAddress?.emailAddress,
         },
         theme: { color: "#10b981" },
       };

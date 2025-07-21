@@ -50,6 +50,7 @@ export default function RecipeDetailPage() {
 
   useEffect(() => {
     const fetchRecipe = async () => {
+      if (!params || !('id' in params)) return;
       try {
         const response = await fetch(`/api/recipes/${params.id}`);
         if (response.ok) {
@@ -63,10 +64,10 @@ export default function RecipeDetailPage() {
       }
     };
 
-    if (params.id) {
+    if (params && 'id' in params && params.id) {
       fetchRecipe();
     }
-  }, [params.id]);
+  }, [params]);
 
   const toggleFavorite = () => {
     setIsFavorite(!isFavorite);
