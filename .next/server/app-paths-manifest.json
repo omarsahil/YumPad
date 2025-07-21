@@ -1,10 +1,3 @@
 {
-  "/page": "app/page.js",
-  "/api/recipes/of-the-day": "app/api/recipes/of-the-day.js",
-  "/api/recipes/[id]/route": "app/api/recipes/[id]/route.js",
-  "/api/recipes/route": "app/api/recipes/route.js",
-  "/api/razorpay/order": "app/api/razorpay/order.js",
-  "/terms/page": "app/terms/page.js",
-  "/cookies/page": "app/cookies/page.js",
-  "/privacy/page": "app/privacy/page.js"
+  "/page": "app/page.js"
 }

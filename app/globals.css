@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700;800;900&display=swap");
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -13,13 +13,13 @@ html,
 body {
   max-width: 100vw;
   overflow-x: hidden;
-  font-family: 'Inter', sans-serif;
-  background-color: #FEFBF6;
+  font-family: "Inter", sans-serif;
+  background-color: #fefbf6;
   color: #1f2937;
 }
 
 .font-playfair {
-  font-family: 'Playfair Display', serif;
+  font-family: "Playfair Display", serif;
 }
 
 .hero-gradient {
@@ -45,23 +45,23 @@ body {
   .btn-primary {
     @apply bg-emerald-600 text-white px-6 py-3 rounded-xl font-medium hover:bg-emerald-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl;
   }
-  
+
   .btn-secondary {
     @apply bg-white text-emerald-600 border-2 border-emerald-600 px-6 py-3 rounded-xl font-medium hover:bg-emerald-50 transition-all duration-300;
   }
-  
+
   .input-field {
     @apply w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 bg-white;
   }
-  
+
   .recipe-card {
     @apply bg-white rounded-2xl shadow-lg overflow-hidden card-hover;
   }
-  
+
   .tag {
     @apply bg-emerald-100 text-emerald-800 text-sm font-medium px-3 py-1 rounded-full;
   }
-  
+
   .section-padding {
     @apply py-16 px-4 sm:px-6 lg:px-8;
   }
@@ -83,4 +83,29 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #059669;
+}
+
+@keyframes premium-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 8px 2px #facc15, 0 0 0 0 #fde68a;
+  }
+  50% {
+    box-shadow: 0 0 16px 6px #facc15, 0 0 8px 2px #fde68a;
+  }
+}
+@keyframes premium-crown {
+  0%,
+  100% {
+    transform: translateY(0) scale(1);
+  }
+  50% {
+    transform: translateY(-3px) scale(1.1);
+  }
+}
+.animate-premium-glow {
+  animation: premium-glow 2s infinite;
+}
+.animate-premium-crown {
+  animation: premium-crown 1.2s infinite;
 }

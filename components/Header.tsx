@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { UserButton, SignInButton, SignUpButton, useUser } from "@clerk/nextjs";
-import { Menu, X, ChefHat, Search } from "lucide-react";
+import { Menu, X, ChefHat, Search, Crown, Star } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 // Add Razorpay to the window type for TypeScript
@@ -92,9 +92,23 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const { isSignedIn, user } = useUser();
   const [showPricing, setShowPricing] = useState(false);
+  const [isPremium, setIsPremium] = useState<boolean>(false);
   useRazorpayScript();
 
-  const isPremium = user && user.publicMetadata?.isPremium;
+  // Fetch premium status from DB
+  useEffect(() => {
+    const fetchPremium = async () => {
+      if (!user) return;
+      try {
+        const res = await fetch(`/api/user-premium?id=${user.id}`);
+        if (res.ok) {
+          const data = await res.json();
+          setIsPremium(!!data.isPremium);
+        }
+      } catch {}
+    };
+    fetchPremium();
+  }, [user]);
 
   const handleRazorpay = async () => {
     try {
@@ -201,8 +215,9 @@ export default function Header() {
           {/* Auth & Mobile Menu */}
           <div className="flex items-center space-x-2 sm:space-x-4">
             {isPremium ? (
-              <span className="px-3 sm:px-4 py-1 sm:py-2 rounded-lg font-semibold text-white bg-yellow-500 shadow text-xs sm:text-sm mr-1 sm:mr-2">
+              <span className="flex items-center gap-1 px-3 sm:px-4 py-1 sm:py-2 rounded-full font-semibold text-white bg-gradient-to-r from-yellow-400 via-yellow-500 to-yellow-600 shadow-lg ring-2 ring-yellow-300/60 drop-shadow-lg text-xs sm:text-sm mr-1 sm:mr-2 animate-premium-glow">
                 Premium
+                <Crown className="w-4 h-4 text-yellow-200 drop-shadow ml-1 animate-premium-crown" />
               </span>
             ) : (
               <button
