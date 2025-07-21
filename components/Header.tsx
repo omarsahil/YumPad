@@ -174,7 +174,7 @@ export default function Header() {
             >
               <ChefHat className="w-6 h-6 text-white" />
             </motion.div>
-            <span className="text-xl sm:text-2xl font-playfair font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">
+            <span className="text-xl sm:text-2xl font-playfair font-bold text-white group-hover:text-yellow-300 transition-colors">
               YumPad
             </span>
           </Link>
