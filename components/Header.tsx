@@ -6,12 +6,26 @@ import { UserButton, SignInButton, SignUpButton, useUser } from "@clerk/nextjs";
 import { Menu, X, ChefHat, Search } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+// Load Razorpay script
+function useRazorpayScript() {
+  useEffect(() => {
+    if (typeof window !== "undefined" && !window.Razorpay) {
+      const script = document.createElement("script");
+      script.src = "https://checkout.razorpay.com/v1/checkout.js";
+      script.async = true;
+      document.body.appendChild(script);
+    }
+  }, []);
+}
+
 function PricingModal({
   open,
   onClose,
+  onGetPremium,
 }: {
   open: boolean;
   onClose: () => void;
+  onGetPremium: () => void;
 }) {
   if (!open) return null;
   return (
@@ -51,16 +65,13 @@ function PricingModal({
               <li>✔️ Priority support</li>
             </ul>
             <div className="mt-4 text-lg font-bold text-yellow-700">
-              $4.99/month
+              ₹499/month
             </div>
           </div>
         </div>
         <button
           className="w-full btn-primary bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-3 rounded-xl text-lg transition-colors"
-          onClick={() =>
-            (window.location.href =
-              "https://checkout.dodopayments.com/buy/pdt_5JaO1GqENxXiH12yG3MZd?quantity=1")
-          }
+          onClick={onGetPremium}
         >
           Get Premium
         </button>
@@ -74,6 +85,62 @@ export default function Header() {
   const [scrolled, setScrolled] = useState(false);
   const { isSignedIn, user } = useUser();
   const [showPricing, setShowPricing] = useState(false);
+  useRazorpayScript();
+
+  const isPremium = user && user.publicMetadata?.isPremium;
+
+  const handleRazorpay = async () => {
+    try {
+      const res = await fetch("/api/razorpay/order", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          amount: 499,
+          currency: "INR",
+          userId: user?.id,
+        }),
+      });
+      if (!res.ok) {
+        const text = await res.text();
+        alert("Error creating order: " + text);
+        return;
+      }
+      let order;
+      try {
+        order = await res.json();
+      } catch (err) {
+        const text = await res.text();
+        alert("Unexpected response from server: " + text);
+        return;
+      }
+      if (!order || !order.id) {
+        alert("Failed to create Razorpay order.");
+        return;
+      }
+      const options = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID,
+        amount: order.amount,
+        currency: order.currency,
+        order_id: order.id,
+        name: "YumPad Premium",
+        description: "Upgrade to premium",
+        handler: function (response: any) {
+          // Show a toast or alert, then reload to update premium status
+          alert("Payment successful! Welcome to Premium.");
+          window.location.reload();
+        },
+        prefill: {
+          email: user?.email,
+        },
+        theme: { color: "#10b981" },
+      };
+      // @ts-ignore
+      const rzp = new window.Razorpay(options);
+      rzp.open();
+    } catch (error) {
+      alert("An error occurred while starting payment: " + error);
+    }
+  };
 
   useEffect(() => {
     const handleScroll = () => {
@@ -96,7 +163,7 @@ export default function Header() {
       animate={{ y: 0 }}
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-300 bg-gradient-to-r from-emerald-600 to-emerald-800"
     >
-      <nav className="container mx-auto px-4 lg:px-8 py-4">
+      <nav className="container mx-auto px-2 sm:px-4 lg:px-8 py-3 sm:py-4">
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2 group">
@@ -107,38 +174,41 @@ export default function Header() {
             >
               <ChefHat className="w-6 h-6 text-white" />
             </motion.div>
-            <span className="text-2xl font-playfair font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">
+            <span className="text-xl sm:text-2xl font-playfair font-bold text-gray-900 group-hover:text-emerald-600 transition-colors">
               YumPad
             </span>
           </Link>
-
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
+          <div className="hidden lg:flex items-center space-x-6 sm:space-x-8">
             {navItems.map((item) => (
               <Link
                 key={item.href}
                 href={item.href}
-                className="text-white hover:text-emerald-200 font-medium transition-colors relative group"
+                className="text-white hover:text-emerald-200 font-medium transition-colors relative group text-base sm:text-lg"
               >
                 {item.label}
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-emerald-600 transition-all group-hover:w-full"></span>
               </Link>
             ))}
           </div>
-
           {/* Auth & Mobile Menu */}
-          <div className="flex items-center space-x-4">
-            <button
-              className="btn-primary px-4 py-2 rounded-lg font-semibold text-white bg-yellow-400 hover:bg-yellow-500 transition-colors shadow"
-              style={{ marginRight: "0.5rem" }}
-              onClick={() => setShowPricing(true)}
-            >
-              Go Premium
-            </button>
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            {isPremium ? (
+              <span className="px-3 sm:px-4 py-1 sm:py-2 rounded-lg font-semibold text-white bg-yellow-500 shadow text-xs sm:text-sm mr-1 sm:mr-2">
+                Premium
+              </span>
+            ) : (
+              <button
+                className="btn-primary px-3 sm:px-4 py-1 sm:py-2 rounded-lg font-semibold text-white bg-yellow-400 hover:bg-yellow-500 transition-colors shadow text-xs sm:text-sm mr-1 sm:mr-2"
+                onClick={() => setShowPricing(true)}
+              >
+                Go Premium
+              </button>
+            )}
             {/* Auth Buttons */}
             {isSignedIn ? (
-              <div className="flex items-center space-x-3">
-                <span className="hidden sm:block text-sm text-white">
+              <div className="flex items-center space-x-2 sm:space-x-3">
+                <span className="hidden sm:block text-xs sm:text-sm text-white">
                   Welcome, {user?.firstName || "Chef"}!
                 </span>
                 <UserButton
@@ -146,18 +216,18 @@ export default function Header() {
                   appearance={{
                     elements: {
                       avatarBox:
-                        "w-10 h-10 rounded-full ring-2 ring-emerald-200 hover:ring-emerald-400 transition-all",
+                        "w-8 h-8 sm:w-10 sm:h-10 rounded-full ring-2 ring-emerald-200 hover:ring-emerald-400 transition-all",
                     },
                   }}
                 />
               </div>
             ) : (
-              <div className="hidden sm:flex items-center space-x-3">
+              <div className="hidden sm:flex items-center space-x-2 sm:space-x-3">
                 <SignInButton mode="modal">
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="text-gray-700 hover:text-emerald-600 font-medium transition-colors"
+                    className="text-gray-700 hover:text-emerald-600 font-medium transition-colors text-xs sm:text-base"
                   >
                     Sign In
                   </motion.button>
@@ -166,20 +236,20 @@ export default function Header() {
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="btn-primary"
+                    className="btn-primary text-xs sm:text-base"
                   >
                     Get Started
                   </motion.button>
                 </SignUpButton>
               </div>
             )}
-
             {/* Mobile Menu Button */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 text-gray-700 hover:text-emerald-600 transition-colors"
+              className="lg:hidden p-2 text-gray-700 hover:text-emerald-200 transition-colors"
+              aria-label="Toggle menu"
             >
               {mobileMenuOpen ? (
                 <X className="w-6 h-6" />
@@ -189,7 +259,6 @@ export default function Header() {
             </motion.button>
           </div>
         </div>
-
         {/* Mobile Menu */}
         <AnimatePresence>
           {mobileMenuOpen && (
@@ -197,9 +266,9 @@ export default function Header() {
               initial={{ opacity: 0, height: 0 }}
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
-              className="lg:hidden mt-4 py-4 border-t border-gray-200"
+              className="lg:hidden mt-2 py-2 border-t border-gray-200"
             >
-              <div className="flex flex-col space-y-4">
+              <div className="flex flex-col space-y-2 sm:space-y-4">
                 {navItems.map((item, index) => (
                   <motion.div
                     key={item.href}
@@ -210,25 +279,26 @@ export default function Header() {
                     <Link
                       href={item.href}
                       onClick={() => setMobileMenuOpen(false)}
-                      className="block py-2 text-white hover:text-emerald-200 font-medium transition-colors"
+                      className="block py-2 text-white hover:text-emerald-200 font-medium transition-colors text-base"
                     >
                       {item.label}
                     </Link>
                   </motion.div>
                 ))}
-
                 {!isSignedIn && (
                   <motion.div
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.4 }}
-                    className="flex flex-col space-y-2 pt-4 border-t border-gray-200"
+                    className="flex flex-col space-y-2 pt-2 border-t border-gray-200"
                   >
                     <SignInButton mode="modal">
-                      <button className="btn-secondary w-full">Sign In</button>
+                      <button className="btn-secondary w-full text-xs sm:text-base">
+                        Sign In
+                      </button>
                     </SignInButton>
                     <SignUpButton mode="modal">
-                      <button className="btn-primary w-full">
+                      <button className="btn-primary w-full text-xs sm:text-base">
                         Get Started
                       </button>
                     </SignUpButton>
@@ -239,7 +309,14 @@ export default function Header() {
           )}
         </AnimatePresence>
       </nav>
-      <PricingModal open={showPricing} onClose={() => setShowPricing(false)} />
+      <PricingModal
+        open={showPricing}
+        onClose={() => setShowPricing(false)}
+        onGetPremium={() => {
+          setShowPricing(false);
+          handleRazorpay();
+        }}
+      />
     </motion.header>
   );
 }

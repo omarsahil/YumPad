@@ -155,28 +155,28 @@ export default function RecipesPage() {
       <Header />
       <main className="pt-16">
         {/* Hero Section */}
-        <section className="bg-gradient-to-r from-emerald-600 to-emerald-800 text-white py-16">
+        <section className="bg-gradient-to-r from-emerald-600 to-emerald-800 text-white py-12 md:py-16">
           <div className="container mx-auto px-4 text-center">
-            <h1 className="text-4xl md:text-6xl font-playfair font-bold mb-4 text-white">
+            <h1 className="text-3xl sm:text-4xl md:text-6xl font-playfair font-bold mb-4 text-white">
               Explore All Recipes
             </h1>
-            <p className="text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-white">
+            <p className="text-lg sm:text-xl md:text-2xl mb-8 max-w-3xl mx-auto text-white">
               Discover thousands of delicious recipes from around the world
             </p>
           </div>
         </section>
         {/* Filters Section */}
-        <section className="py-8 bg-white shadow-sm">
-          <div className="container mx-auto px-4">
-            <div className="flex flex-wrap gap-4 items-center justify-center">
+        <section className="py-6 md:py-8 bg-white shadow-sm">
+          <div className="container mx-auto px-2 sm:px-4">
+            <div className="flex flex-col sm:flex-row flex-wrap gap-4 items-center justify-center">
               {/* Search */}
-              <div className="relative flex-1 max-w-md">
+              <div className="relative flex-1 w-full max-w-md">
                 <input
                   type="text"
                   placeholder="Search recipes..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="input-field"
+                  className="input-field w-full"
                   onKeyDown={(e) => {
                     if (e.key === "Enter") handleSearch();
                   }}
@@ -194,7 +194,7 @@ export default function RecipesPage() {
                     router.push(`/recipes?category=${e.target.value}`);
                   }
                 }}
-                className="input-field w-auto min-w-[150px]"
+                className="input-field w-full sm:w-auto min-w-[150px]"
               >
                 {categories.map((category) => (
                   <option key={category} value={category}>
@@ -208,7 +208,7 @@ export default function RecipesPage() {
               <select
                 value={selectedDietary}
                 onChange={(e) => setSelectedDietary(e.target.value)}
-                className="input-field w-auto min-w-[150px]"
+                className="input-field w-full sm:w-auto min-w-[150px]"
               >
                 {dietaryOptions.map((option) => (
                   <option key={option} value={option}>
@@ -220,7 +220,7 @@ export default function RecipesPage() {
               </select>
               <button
                 onClick={handleSearch}
-                className="btn-primary flex items-center space-x-2"
+                className="btn-primary flex items-center space-x-2 w-full sm:w-auto"
               >
                 <Filter className="w-4 h-4" />
                 <span>Search</span>
@@ -229,17 +229,17 @@ export default function RecipesPage() {
           </div>
         </section>
         {/* Results Section */}
-        <section className="py-16">
-          <div className="container mx-auto px-4">
+        <section className="py-10 md:py-16">
+          <div className="container mx-auto px-2 sm:px-4">
             {loading ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
                 {[...Array(12)].map((_, i) => (
                   <div
                     key={i}
                     className="bg-white rounded-2xl shadow-lg overflow-hidden animate-pulse"
                   >
-                    <div className="h-56 bg-gray-300"></div>
-                    <div className="p-6">
+                    <div className="h-44 sm:h-56 bg-gray-300"></div>
+                    <div className="p-4 sm:p-6">
                       <div className="h-4 bg-gray-300 rounded mb-2"></div>
                       <div className="h-4 bg-gray-300 rounded mb-4"></div>
                       <div className="h-3 bg-gray-300 rounded mb-6"></div>
@@ -249,7 +249,7 @@ export default function RecipesPage() {
                 ))}
               </div>
             ) : recipes.length > 0 ? (
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6 md:gap-8">
                 {recipes.map((recipe) => (
                   <RecipeCard
                     key={recipe.id}
@@ -261,7 +261,7 @@ export default function RecipesPage() {
               </div>
             ) : (
               <div className="text-center py-20">
-                <h2 className="text-2xl font-semibold text-gray-600 mb-4">
+                <h2 className="text-xl sm:text-2xl font-semibold text-gray-600 mb-4">
                   No recipes found
                 </h2>
                 <p className="text-gray-500">
@@ -273,41 +273,43 @@ export default function RecipesPage() {
         </section>
         {/* Suggested Recipes Section */}
         {searchQuery && suggestedRecipes.length > 0 && (
-          <section className="py-8">
-            <div className="container mx-auto px-4">
-              <h2 className="text-xl font-bold mb-4">Suggested Recipes</h2>
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <section className="py-6 md:py-8">
+            <div className="container mx-auto px-2 sm:px-4">
+              <h2 className="text-lg sm:text-xl font-bold mb-4">
+                Suggested Recipes
+              </h2>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
                 {suggestedRecipes.map((recipe) => (
                   <Link
                     key={recipe.id}
                     href={`/recipes/${recipe.id}`}
                     className="recipe-card group cursor-pointer block"
                   >
-                    <div className="relative h-56 overflow-hidden">
+                    <div className="relative h-44 sm:h-56 overflow-hidden">
                       <img
                         src={recipe.image}
                         alt={recipe.title}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                       <div className="absolute top-4 left-4">
-                        <span className="bg-emerald-500 text-white px-3 py-1 rounded-full text-sm font-medium">
+                        <span className="bg-emerald-500 text-white px-3 py-1 rounded-full text-xs sm:text-sm font-medium">
                           {recipe.category}
                         </span>
                       </div>
                       <div className="absolute bottom-4 left-4 bg-black/50 backdrop-blur-sm text-white px-3 py-1 rounded-full flex items-center space-x-1">
-                        <span className="text-sm font-medium">
-                          ⭐ {recipe.rating}
+                        <span className="text-xs sm:text-sm font-medium">
+                          31 {recipe.rating}
                         </span>
                         <span className="text-xs text-gray-300">
                           ({recipe.reviews})
                         </span>
                       </div>
                     </div>
-                    <div className="p-6">
-                      <h3 className="text-xl font-bold font-playfair text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
+                    <div className="p-4 sm:p-6">
+                      <h3 className="text-lg sm:text-xl font-bold font-playfair text-gray-900 mb-2 group-hover:text-emerald-600 transition-colors">
                         {recipe.title}
                       </h3>
-                      <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                      <p className="text-gray-600 text-xs sm:text-sm mb-4 line-clamp-2">
                         {recipe.description}
                       </p>
                     </div>

@@ -6,21 +6,23 @@ export default function Footer() {
 
   return (
     <footer className="bg-gray-900 text-white">
-      <div className="container mx-auto px-4 lg:px-8 py-16">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-10">
+      <div className="container mx-auto px-2 sm:px-4 lg:px-8 py-10 sm:py-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-10">
           {/* Brand Section */}
-          <div className="lg:col-span-1">
-            <div className="flex items-center space-x-2 mb-6">
+          <div className="lg:col-span-1 mb-8 lg:mb-0">
+            <div className="flex items-center space-x-2 mb-4 sm:mb-6">
               <div className="p-2 bg-emerald-600 rounded-xl">
                 <ChefHat className="w-6 h-6 text-white" />
               </div>
-              <span className="text-2xl font-playfair font-bold">YumPad</span>
+              <span className="text-xl sm:text-2xl font-playfair font-bold">
+                YumPad
+              </span>
             </div>
-            <p className="text-gray-400 mb-6 leading-relaxed">
+            <p className="text-gray-400 mb-4 sm:mb-6 leading-relaxed text-sm sm:text-base">
               Your ultimate cooking companion. Discover, plan, and create
               delicious meals with ease.
             </p>
-            <div className="flex space-x-4">
+            <div className="flex space-x-3 sm:space-x-4">
               <a
                 href="#"
                 className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center hover:bg-emerald-600 transition-colors"
@@ -49,11 +51,12 @@ export default function Footer() {
               </a>
             </div>
           </div>
-
           {/* Navigation */}
-          <div>
-            <h3 className="font-semibold text-lg mb-6">Navigate</h3>
-            <ul className="space-y-4 text-gray-400">
+          <div className="mb-8 lg:mb-0">
+            <h3 className="font-semibold text-base sm:text-lg mb-4 sm:mb-6">
+              Navigate
+            </h3>
+            <ul className="space-y-3 sm:space-y-4 text-gray-400 text-sm sm:text-base">
               <li>
                 <Link
                   href="/"
@@ -88,11 +91,12 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-
           {/* Categories */}
-          <div>
-            <h3 className="font-semibold text-lg mb-6">Categories</h3>
-            <ul className="space-y-4 text-gray-400">
+          <div className="mb-8 lg:mb-0">
+            <h3 className="font-semibold text-base sm:text-lg mb-4 sm:mb-6">
+              Categories
+            </h3>
+            <ul className="space-y-3 sm:space-y-4 text-gray-400 text-sm sm:text-base">
               <li>
                 <Link
                   href="/recipes?category=breakfast"
@@ -127,11 +131,12 @@ export default function Footer() {
               </li>
             </ul>
           </div>
-
           {/* Contact */}
           <div>
-            <h3 className="font-semibold text-lg mb-6">Get in Touch</h3>
-            <ul className="space-y-4 text-gray-400">
+            <h3 className="font-semibold text-base sm:text-lg mb-4 sm:mb-6">
+              Get in Touch
+            </h3>
+            <ul className="space-y-3 sm:space-y-4 text-gray-400 text-sm sm:text-base">
               <li className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-emerald-500" />
                 <span>mdomarsahil@gmail.com</span>
@@ -150,14 +155,13 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-
         {/* Bottom Section */}
-        <div className="border-t border-gray-800 mt-12 pt-8">
-          <div className="flex flex-col md:flex-row justify-between items-center">
-            <p className="text-gray-400 text-sm">
+        <div className="border-t border-gray-800 mt-8 sm:mt-12 pt-6 sm:pt-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <p className="text-gray-400 text-xs sm:text-sm">
               &copy; {currentYear} YumPad. All rights reserved.
             </p>
-            <div className="flex space-x-6 mt-4 md:mt-0">
+            <div className="flex flex-wrap space-x-4 sm:space-x-6 mt-2 md:mt-0">
               <Link
                 href="/privacy"
                 className="text-gray-400 hover:text-white text-sm transition-colors"
