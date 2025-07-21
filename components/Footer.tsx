@@ -180,6 +180,24 @@ export default function Footer() {
               >
                 Cookie Policy
               </Link>
+              <Link
+                href="/refund"
+                className="text-gray-400 hover:text-white text-sm transition-colors"
+              >
+                Refund Policy
+              </Link>
+              <Link
+                href="/disclaimer"
+                className="text-gray-400 hover:text-white text-sm transition-colors"
+              >
+                Disclaimer
+              </Link>
+              <Link
+                href="/about"
+                className="text-gray-400 hover:text-white text-sm transition-colors"
+              >
+                About Us
+              </Link>
             </div>
           </div>
         </div>

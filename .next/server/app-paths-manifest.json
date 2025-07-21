@@ -1,15 +1,10 @@
 {
-  "/_not-found/page": "app/_not-found/page.js",
-  "/api/dodo-webhook/route": "app/api/dodo-webhook/route.js",
-  "/api/mealdb/route": "app/api/mealdb/route.js",
-  "/api/meal-plan/route": "app/api/meal-plan/route.js",
-  "/api/favorites/route": "app/api/favorites/route.js",
-  "/api/recipes/route": "app/api/recipes/route.js",
-  "/meal-planner/page": "app/meal-planner/page.js",
-  "/api/recipes/[id]/route": "app/api/recipes/[id]/route.js",
   "/page": "app/page.js",
-  "/api/recipes/random/route": "app/api/recipes/random/route.js",
-  "/recipes/[id]/page": "app/recipes/[id]/page.js",
-  "/recipes/page": "app/recipes/page.js",
-  "/favorites/page": "app/favorites/page.js"
+  "/api/recipes/of-the-day": "app/api/recipes/of-the-day.js",
+  "/api/recipes/[id]/route": "app/api/recipes/[id]/route.js",
+  "/api/recipes/route": "app/api/recipes/route.js",
+  "/api/razorpay/order": "app/api/razorpay/order.js",
+  "/terms/page": "app/terms/page.js",
+  "/cookies/page": "app/cookies/page.js",
+  "/privacy/page": "app/privacy/page.js"
 }
